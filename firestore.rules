@@ -1,0 +1,217 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global safety net: deny everything by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidRehabProfile(data, userId) {
+      return data.userId is string &&
+             data.userId == userId &&
+             data.userId == request.auth.uid &&
+             data.displayName is string &&
+             data.displayName.size() >= 1 &&
+             data.displayName.size() <= 60 &&
+             data.feifeiNickname is string &&
+             data.feifeiNickname.size() >= 1 &&
+             data.feifeiNickname.size() <= 30 &&
+             data.todayDate is string &&
+             data.todayDate.size() == 10 &&
+             data.todayCount is int &&
+             data.todayCount >= 0 &&
+             data.todayCount <= 999 &&
+             data.totalCompleted is int &&
+             data.totalCompleted >= 0 &&
+             (!('antibodyBalance' in data) || (data.antibodyBalance is int && data.antibodyBalance >= 0 && data.antibodyBalance <= 9999999)) &&
+             (!('ownedItemIds' in data) || (data.ownedItemIds is list && data.ownedItemIds.size() <= 20)) &&
+             (!('equippedItemIds' in data) || (data.equippedItemIds is list && data.equippedItemIds.size() <= 20)) &&
+             (!('wardPlacements' in data) || (data.wardPlacements is list && data.wardPlacements.size() <= 20)) &&
+             data.createdAt is timestamp &&
+             data.createdAt <= request.time &&
+             data.updatedAt is timestamp &&
+             data.updatedAt <= request.time;
+    }
+
+    function isValidRehabTask(data, userId) {
+      return data.userId is string &&
+             data.userId == userId &&
+             data.userId == request.auth.uid &&
+             data.title is string &&
+             data.title.size() >= 1 &&
+             data.title.size() <= 100 &&
+             data.effortLevel in ['micro', 'gentle', 'boss'] &&
+             (!('category' in data) || (data.category is string && data.category.size() >= 1 && data.category.size() <= 30)) &&
+             data.completed is bool &&
+             data.completedDate is string &&
+             data.completedDate.size() <= 10 &&
+             data.note is string &&
+             data.note.size() <= 200 &&
+             (!('sortOrder' in data) || data.sortOrder is int) &&
+             (!('timeSlotsEnabled' in data) || data.timeSlotsEnabled is bool) &&
+             (!('morningDone' in data) || data.morningDone is bool) &&
+             (!('noonDone' in data) || data.noonDone is bool) &&
+             (!('eveningDone' in data) || data.eveningDone is bool) &&
+             (!('morningEnabled' in data) || data.morningEnabled is bool) &&
+             (!('noonEnabled' in data) || data.noonEnabled is bool) &&
+             (!('eveningEnabled' in data) || data.eveningEnabled is bool) &&
+             (!('resetHour' in data) || (data.resetHour is int && data.resetHour >= 0 && data.resetHour <= 23)) &&
+             (!('deadlineDate' in data) || (data.deadlineDate is string && data.deadlineDate.size() <= 10)) &&
+             data.createdAt is timestamp &&
+             data.createdAt <= request.time &&
+             data.updatedAt is timestamp &&
+             data.updatedAt <= request.time;
+    }
+
+    function isValidRehabCheckin(data, userId) {
+      return data.userId is string &&
+             data.userId == userId &&
+             data.userId == request.auth.uid &&
+             data.dateKey is string &&
+             data.dateKey.size() == 10 &&
+             data.energyLevel in ['flat', 'low', 'steady', 'e10', 'e20', 'e30', 'e40', 'e50', 'e60', 'e70', 'e80', 'e90', 'e100'] &&
+             (!('energyPercent' in data) || (data.energyPercent is int && data.energyPercent >= 0 && data.energyPercent <= 100)) &&
+             data.reflection is string &&
+             data.reflection.size() <= 300 &&
+             (!('wardSnapshot' in data) || (data.wardSnapshot is list && data.wardSnapshot.size() <= 20)) &&
+             (!('doctorPoseSnapshot' in data) || (data.doctorPoseSnapshot is string && data.doctorPoseSnapshot.size() <= 128)) &&
+             (!('completedTaskTitles' in data) || (data.completedTaskTitles is list && data.completedTaskTitles.size() <= 100)) &&
+             data.createdAt is timestamp &&
+             data.createdAt <= request.time &&
+             data.updatedAt is timestamp &&
+             data.updatedAt <= request.time;
+    }
+
+    match /users/{userId} {
+      allow get: if isOwner(userId) && isValidId(userId);
+      allow list: if isOwner(userId);
+
+      allow create: if isOwner(userId) &&
+                       isValidId(userId) &&
+                       incoming().keys().hasAll([
+                         'userId', 'displayName', 'feifeiNickname',
+                         'todayDate', 'todayCount', 'totalCompleted',
+                         'antibodyBalance', 'ownedItemIds', 'equippedItemIds',
+                         'wardPlacements', 'createdAt', 'updatedAt'
+                       ]) &&
+                       incoming().keys().hasOnly([
+                         'userId', 'displayName', 'feifeiNickname',
+                         'todayDate', 'todayCount', 'totalCompleted',
+                         'antibodyBalance', 'ownedItemIds', 'equippedItemIds',
+                         'wardPlacements', 'createdAt', 'updatedAt'
+                       ]) &&
+                       isValidRehabProfile(incoming(), userId);
+
+      allow update: if isOwner(userId) &&
+                       isValidId(userId) &&
+                       isValidRehabProfile(incoming(), userId) &&
+                       incoming().userId == existing().userId &&
+                       incoming().createdAt == existing().createdAt &&
+                       incoming().diff(existing()).affectedKeys().hasOnly([
+                         'displayName', 'feifeiNickname', 'todayDate',
+                         'todayCount', 'totalCompleted',
+                         'antibodyBalance', 'ownedItemIds', 'equippedItemIds',
+                         'wardPlacements', 'updatedAt'
+                       ]);
+
+      allow delete: if isOwner(userId) && isValidId(userId);
+
+      match /tasks/{taskId} {
+        allow get: if isOwner(userId) && isValidId(userId) && isValidId(taskId);
+        allow list: if isOwner(userId) && isValidId(userId);
+
+        allow create: if isOwner(userId) &&
+                         isValidId(userId) &&
+                         isValidId(taskId) &&
+                         incoming().keys().hasAll([
+                           'userId', 'title', 'effortLevel', 'completed',
+                           'completedDate', 'note', 'createdAt', 'updatedAt'
+                         ]) &&
+                         incoming().keys().hasOnly([
+                           'userId', 'title', 'effortLevel', 'category', 'completed',
+                           'completedDate', 'note', 'sortOrder', 'timeSlotsEnabled',
+                           'morningDone', 'noonDone', 'eveningDone',
+                           'morningEnabled', 'noonEnabled', 'eveningEnabled',
+                           'resetHour', 'deadlineDate', 'createdAt', 'updatedAt'
+                         ]) &&
+                         isValidRehabTask(incoming(), userId);
+
+        allow update: if isOwner(userId) &&
+                         isValidId(userId) &&
+                         isValidId(taskId) &&
+                         isValidRehabTask(incoming(), userId) &&
+                         incoming().userId == existing().userId &&
+                         incoming().createdAt == existing().createdAt && (
+                           // Action: Toggle completion / morning-noon-evening time slots / expiry reset
+                           incoming().diff(existing()).affectedKeys().hasOnly([
+                             'completed', 'completedDate', 'morningDone', 'noonDone', 'eveningDone', 'updatedAt'
+                           ]) ||
+                           // Action: Edit, shrink, split mode, or schedule meta (resetHour / deadlineDate)
+                           incoming().diff(existing()).affectedKeys().hasOnly([
+                             'title', 'effortLevel', 'category', 'note', 'completed',
+                             'timeSlotsEnabled', 'morningDone', 'noonDone', 'eveningDone',
+                             'morningEnabled', 'noonEnabled', 'eveningEnabled',
+                             'resetHour', 'deadlineDate', 'updatedAt'
+                           ]) ||
+                           // Action: Reorder tasks via drag
+                           incoming().diff(existing()).affectedKeys().hasOnly(['sortOrder', 'updatedAt'])
+                         );
+
+        allow delete: if isOwner(userId) && isValidId(userId) && isValidId(taskId);
+      }
+
+      match /checkins/{checkinId} {
+        allow get: if isOwner(userId) && isValidId(userId) && isValidId(checkinId);
+        allow list: if isOwner(userId) && isValidId(userId);
+
+        allow create: if isOwner(userId) &&
+                         isValidId(userId) &&
+                         isValidId(checkinId) &&
+                         incoming().keys().hasAll([
+                           'userId', 'dateKey', 'energyLevel', 'reflection',
+                           'createdAt', 'updatedAt'
+                         ]) &&
+                         incoming().keys().hasOnly([
+                           'userId', 'dateKey', 'energyLevel', 'energyPercent',
+                           'reflection', 'wardSnapshot', 'doctorPoseSnapshot',
+                           'completedTaskTitles', 'createdAt', 'updatedAt'
+                         ]) &&
+                         isValidRehabCheckin(incoming(), userId);
+
+        allow update: if isOwner(userId) &&
+                         isValidId(userId) &&
+                         isValidId(checkinId) &&
+                         isValidRehabCheckin(incoming(), userId) &&
+                         incoming().userId == existing().userId &&
+                         incoming().dateKey == existing().dateKey &&
+                         incoming().createdAt == existing().createdAt &&
+                         incoming().diff(existing()).affectedKeys().hasOnly([
+                           'energyLevel', 'energyPercent', 'reflection', 'wardSnapshot',
+                           'doctorPoseSnapshot', 'completedTaskTitles', 'updatedAt'
+                         ]);
+
+        allow delete: if isOwner(userId) && isValidId(userId) && isValidId(checkinId);
+      }
+    }
+  }
+}

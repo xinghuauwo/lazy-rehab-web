@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="220dp"
+    android:height="180dp"
+    android:viewportWidth="220"
+    android:viewportHeight="180">
+
+    <!-- Outer cream card -->
+    <path
+        android:fillColor="#FFFDF8"
+        android:strokeColor="#E8CDD4"
+        android:strokeWidth="2"
+        android:pathData="M14,2 L206,2 A12,12 0 0 1 218,14 L218,166 A12,12 0 0 1 206,178 L14,178 A12,12 0 0 1 2,166 L2,14 A12,12 0 0 1 14,2 Z" />
+
+    <!-- Top sakura banner -->
+    <path
+        android:fillColor="#FDE4E9"
+        android:pathData="M14,4 L206,4 A10,10 0 0 1 216,14 L216,28 L4,28 L4,14 A10,10 0 0 1 14,4 Z" />
+
+    <!-- Header bar -->
+    <path
+        android:fillColor="#FFF4F6"
+        android:pathData="M4,28 L216,28 L216,48 L4,48 Z" />
+
+    <!-- Highlighted day column header -->
+    <path
+        android:fillColor="#FCE4EC"
+        android:pathData="M94,28 L124,28 L124,48 L94,48 Z" />
+
+    <!-- Sample colored course cells -->
+    <path
+        android:fillColor="#E3F0FC"
+        android:pathData="M34,48 L64,48 L64,92 L34,92 Z" />
+    <path
+        android:fillColor="#FCE4EC"
+        android:pathData="M64,70 L94,70 L94,114 L64,114 Z" />
+    <path
+        android:fillColor="#E2F3EC"
+        android:pathData="M94,48 L124,48 L124,92 L94,92 Z" />
+    <path
+        android:fillColor="#FFEAD9"
+        android:pathData="M124,92 L154,92 L154,136 L124,136 Z" />
+    <path
+        android:fillColor="#EFE7FB"
+        android:pathData="M154,70 L184,70 L184,114 L154,114 Z" />
+    <path
+        android:fillColor="#D4E6FA"
+        android:pathData="M94,114 L124,114 L124,158 L94,158 Z" />
+
+    <!-- Horizontal grid lines -->
+    <path
+        android:strokeColor="#D7B6BE"
+        android:strokeWidth="1"
+        android:pathData="M4,28 L216,28 M4,48 L216,48 M4,70 L216,70 M4,92 L216,92 M4,114 L216,114 M4,136 L216,136 M4,158 L216,158" />
+
+    <!-- Vertical grid lines -->
+    <path
+        android:strokeColor="#D7B6BE"
+        android:strokeWidth="1"
+        android:pathData="M34,28 L34,176 M64,28 L64,176 M94,28 L94,176 M124,28 L124,176 M154,28 L154,176 M184,28 L184,176" />
+</vector>

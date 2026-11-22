@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>懶癌康復室</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="懶癌康復室" />
+  <link rel="apple-touch-icon" href="./assets/mascot_launcher_icon.png" />
+  <link rel="icon" type="image/png" href="./assets/mascot_launcher_icon.png" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <!-- Top App Bar -->
+    <header class="top-bar">
+      <div class="top-bar-spacer" aria-hidden="true"></div>
+      <h1 id="top-bar-title" class="top-bar-title">懶癌康復室</h1>
+      <button
+        id="btn-account-settings"
+        class="icon-btn top-bar-action"
+        type="button"
+        aria-label="掛號病歷與陪伴設定"
+        title="掛號病歷與陪伴設定"
+      ></button>
+    </header>
+
+    <div class="shell-body">
+      <!-- Desktop / Tablet Navigation Rail -->
+      <aside id="nav-rail" class="nav-rail" aria-label="主導覽列"></aside>
+
+      <!-- Main Scrollable Viewport -->
+      <main id="main-scroll" class="main-scroll">
+        <div id="tab-content" class="content-container"></div>
+      </main>
+    </div>
+
+    <!-- Extended FAB (ROOM tab only) -->
+    <button id="fab-add-task" class="fab hidden" type="button" aria-label="新增療程">
+      <span class="fab-icon" aria-hidden="true"></span>
+      <span class="fab-label">新增療程</span>
+    </button>
+
+    <!-- Mobile Bottom Navigation Bar -->
+    <nav id="bottom-nav" class="bottom-nav" aria-label="底部導覽列"></nav>
+
+    <!-- Snackbar Toast -->
+    <div id="snackbar" class="snackbar" role="status" aria-live="polite"></div>
+
+    <!-- Modal Layer (Bottom Sheets & Dialogs) -->
+    <div id="modal-root" class="modal-root hidden" aria-hidden="true"></div>
+
+    <!-- Fullscreen Overlay Layer (Rehab Mini-Games & Stage-2 CG Lightbox) -->
+    <div id="fullscreen-root" class="fullscreen-root hidden" aria-hidden="true"></div>
+  </div>
+
+  <script src="./data.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

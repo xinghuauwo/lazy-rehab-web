@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/widget_card_bg"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="12dp">
+
+    <ImageView
+        android:id="@+id/widget_doctor_avatar"
+        android:layout_width="58dp"
+        android:layout_height="96dp"
+        android:contentDescription="@string/app_name"
+        android:scaleType="fitCenter"
+        android:src="@drawable/img_mascot_main" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/widget_doctor_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="主治醫生"
+            android:textColor="#D45D82"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/widget_stats_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="今日代辦事項 0/0"
+            android:textColor="#6B5558"
+            android:textSize="11sp" />
+
+        <LinearLayout
+            android:id="@+id/widget_quote_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/widget_pill_bg"
+            android:orientation="vertical"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="7dp">
+
+            <TextView
+                android:id="@+id/widget_quote_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="3"
+                android:text="「今日診斷：維持呼吸就算重要實績，能不動就先別勉強起身。」"
+                android:textColor="#3E2A2D"
+                android:textSize="11.5sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="點醫生換差分・點台詞換一句・點其他處進康復室"
+                android:textColor="#9A727A"
+                android:textSize="9sp" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

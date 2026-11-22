@@ -1,0 +1,248 @@
+{
+  "entities": {
+    "RehabProfile": {
+      "title": "RehabProfile",
+      "description": "User profile and Feifei companion recovery state.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Authenticated Firebase UID owning this profile."
+        },
+        "displayName": {
+          "type": "string",
+          "description": "User display name (1-60 chars)."
+        },
+        "feifeiNickname": {
+          "type": "string",
+          "description": "Nickname for the user's Feifei companion (1-30 chars)."
+        },
+        "todayDate": {
+          "type": "string",
+          "description": "Current local date key in YYYY-MM-DD format."
+        },
+        "todayCount": {
+          "type": "integer",
+          "description": "Number of micro-tasks completed on todayDate (0-999)."
+        },
+        "totalCompleted": {
+          "type": "integer",
+          "description": "Cumulative micro-tasks completed overall."
+        },
+        "antibodyBalance": {
+          "type": "integer",
+          "description": "Spendable anti-laziness antibodies earned from completing tasks (0-9999999)."
+        },
+        "ownedItemIds": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "IDs of pharmacy items redeemed by the user."
+        },
+        "equippedItemIds": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Subset of ownedItemIds currently equipped around the doctor/bed stage."
+        },
+        "wardPlacements": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Encoded item placements in the cozy ward ('itemId:x:y')."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when created (FieldValue.serverTimestamp())."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when last updated (FieldValue.serverTimestamp())."
+        }
+      },
+      "required": [
+        "userId",
+        "displayName",
+        "feifeiNickname",
+        "todayDate",
+        "todayCount",
+        "totalCompleted",
+        "antibodyBalance",
+        "ownedItemIds",
+        "equippedItemIds",
+        "wardPlacements",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "RehabTask": {
+      "title": "RehabTask",
+      "description": "A zero-pressure micro-rehab task item owned by the user.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Authenticated Firebase UID owning this task."
+        },
+        "title": {
+          "type": "string",
+          "description": "Task description (1-100 chars)."
+        },
+        "effortLevel": {
+          "type": "string",
+          "enum": ["micro", "gentle", "boss"],
+          "description": "Task effort tier: micro (1-min), gentle (5-min), or boss (big task to break down)."
+        },
+        "category": {
+          "type": "string",
+          "description": "Task category filter: daily, game, homework, course, or user custom category."
+        },
+        "completed": {
+          "type": "boolean",
+          "description": "Whether the micro-task is currently checked off."
+        },
+        "completedDate": {
+          "type": "string",
+          "description": "YYYY-MM-DD period key when completed, or empty string when pending."
+        },
+        "note": {
+          "type": "string",
+          "description": "Optional gentle encouragement or breakdown note (0-200 chars)."
+        },
+        "sortOrder": {
+          "type": "integer",
+          "description": "Custom display order index for drag-to-reorder."
+        },
+        "timeSlotsEnabled": {
+          "type": "boolean",
+          "description": "Whether this task splits into morning/noon/evening checkboxes."
+        },
+        "morningDone": {
+          "type": "boolean",
+          "description": "Morning slot check state."
+        },
+        "noonDone": {
+          "type": "boolean",
+          "description": "Noon slot check state."
+        },
+        "eveningDone": {
+          "type": "boolean",
+          "description": "Evening slot check state."
+        },
+        "morningEnabled": {
+          "type": "boolean",
+          "description": "Whether morning slot is active when split mode is enabled."
+        },
+        "noonEnabled": {
+          "type": "boolean",
+          "description": "Whether noon slot is active when split mode is enabled."
+        },
+        "eveningEnabled": {
+          "type": "boolean",
+          "description": "Whether evening slot is active when split mode is enabled."
+        },
+        "resetHour": {
+          "type": "integer",
+          "description": "Custom daily reset hour (0-23) for game category tasks."
+        },
+        "deadlineDate": {
+          "type": "string",
+          "description": "Optional YYYY-MM-DD deadline date for homework category tasks."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when created (FieldValue.serverTimestamp())."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when last updated (FieldValue.serverTimestamp())."
+        }
+      },
+      "required": [
+        "userId",
+        "title",
+        "effortLevel",
+        "completed",
+        "completedDate",
+        "note",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "RehabCheckin": {
+      "title": "RehabCheckin",
+      "description": "Daily low-pressure energy and mood check-in entry.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Authenticated Firebase UID owning this check-in."
+        },
+        "dateKey": {
+          "type": "string",
+          "description": "Check-in date in YYYY-MM-DD format."
+        },
+        "energyLevel": {
+          "type": "string",
+          "enum": ["flat", "low", "steady", "e10", "e20", "e30", "e40", "e50", "e60", "e70", "e80", "e90", "e100"],
+          "description": "User's reported energy battery level."
+        },
+        "energyPercent": {
+          "type": "integer",
+          "description": "Exact energy percentage (0-100) selected on the battery slider."
+        },
+        "reflection": {
+          "type": "string",
+          "description": "Optional compassionate reflection note (0-300 chars)."
+        },
+        "wardSnapshot": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Snapshot of placed ward item coordinates ('itemId:x:y') when the diary entry was saved."
+        },
+        "doctorPoseSnapshot": {
+          "type": "string",
+          "description": "Encoded snapshot of the doctor's sprite, coordinates, facing direction, and anchor in the ward when saved."
+        },
+        "completedTaskTitles": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Snapshot of completed task titles saved on this diary day so they survive future daily resets."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when created (FieldValue.serverTimestamp())."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when last updated (FieldValue.serverTimestamp())."
+        }
+      },
+      "required": [
+        "userId",
+        "dateKey",
+        "energyLevel",
+        "reflection",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/RehabProfile" },
+      "description": "User profile and Feifei companion recovery counters."
+    },
+    "/users/{userId}/tasks/{taskId}": {
+      "schema": { "$ref": "#/entities/RehabTask" },
+      "description": "User's personal zero-pressure micro-rehab tasks."
+    },
+    "/users/{userId}/checkins/{checkinId}": {
+      "schema": { "$ref": "#/entities/RehabCheckin" },
+      "description": "User's daily energy and mood check-in log."
+    }
+  }
+}

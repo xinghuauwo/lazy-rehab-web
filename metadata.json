@@ -1,0 +1,6 @@
+{
+  "name": "懶癌康復室",
+  "description": "專為懶癌發作與拖延倦怠設計的暖淡黃療癒康復室，做一件超級小事就算康復成功。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

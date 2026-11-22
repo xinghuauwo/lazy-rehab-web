@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">懶癌康復室</string>
+    <string name="widget_description">桌面顯示懶癌康復室今日進度與冷面主治醫生語錄</string>
+    <string name="timetable_widget_label">每週課表／班表</string>
+    <string name="timetable_widget_description">桌面純瀏覽每週課表／班表（防誤觸設計，修改請進入 App「課程」頁籤）</string>
+</resources>
+
