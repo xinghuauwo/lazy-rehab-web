@@ -1513,6 +1513,8 @@ button {
 .dialog-panel {
   width: 100%;
   max-width: 420px;
+  max-height: 88dvh;
+  overflow-y: auto;
   background: var(--surface-lowest);
   border-radius: 26px;
   padding: 22px;
